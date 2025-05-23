@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
-    html {
-      font-size: 18px;
-    }
+    html { font-size: 18px; }
     body {
       margin: 0;
       background: linear-gradient(120deg, #e0e7ff 0%, #f4f4f9 100%);
@@ -186,13 +184,15 @@
       border-left: 4px solid #6a5acd;
       max-width: 100%;
       overflow-x: auto;
+      min-height: 2.5em;
+      word-break: break-word;
     }
-    .sr-only {
-      position: absolute;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
+    .highlight-word {
+      background: #ffd700;
+      color: #222;
+      border-radius: 4px;
+      padding: 0 2px;
+      transition: background 0.1s;
     }
     @media (max-width: 700px) {
       main[role="main"] {
@@ -213,25 +213,93 @@
     }
   </style>
   <script>
-    // Global utterance to allow pause/resume
-    let currentUtterance = null;
+    // Store all transcript texts
+    const transcripts = {
+      "title-section": "Study Smarter, Not Louder: Debunking the Music & Academic Performance Myth",
+      "myth-section": "Ever heard that listening to classical music—especially Mozart—will boost your IQ or make you ace your next exam? This idea, known as the “Mozart Effect,” has been music to students’ ears for decades. But is it true?",
+      "love-section": "Music is everywhere on campus: in libraries, coffee shops, and even during late-night cram sessions. Students often turn to tunes to make long study sessions less boring, reduce stress and anxiety, and boost motivation and focus. But does your playlist really help you learn, or is it just background noise?",
+      "science-section": "According to the National University, music can reduce stress and ease test anxiety, which might help you perform better in high-pressure situations. Dr. Masha Godkin notes that music activates both sides of your brain, potentially maximizing learning and memory. BUT: Music doesn’t magically make you smarter. The benefits are more about mood and motivation than actual brainpower. Everyone responds differently to music. Some students find certain genres—like classical or video game soundtracks—helpful, while others get distracted, especially by songs with lyrics or unfamiliar rhythms. Binaural beats (special audio tones) at 15Hz have been shown to enhance working memory and focus. Psychologists from Texas A&M University warn that multitasking is a myth. When you study and listen to music, especially music with lyrics, your brain can’t fully focus on both. This can hurt your ability to remember information. “When you’re doing two things at the same time, like studying and listening to music, and one of the things requires cognitive effort, there will be a cost to how much information you can retain.” — Dr. Brian Anderson, Cognitive Psychologist. If you study with music but take exams in silence, you might have trouble recalling what you learned.",
+      "advice-section": "Experiment: Try studying with different types of music (or none at all) and see what works best for you. Avoid Lyrics: Instrumental music or ambient sounds are less likely to distract you. Match Exam Conditions: If your test will be in silence, practice studying in silence too. Listen to Your Brain: If you find yourself singing along instead of solving equations, it’s time to hit pause!",
+      "bottomline-section": "Music can make studying more enjoyable and less stressful, but it won’t magically boost your grades. The best study soundtrack is the one that helps you focus—whether that’s Mozart, lo-fi beats, or good old-fashioned silence.",
+      "quiz": "Quick Quiz: Does listening to music always improve your grades? (Possible answers: Yes or No)",
+      "sources-section": "Sources: National University: Can Music Help You Study and Focus? UMGC: How Music Can Help You Study. JMScheibe: The Scientific Benefits of Listening to Music While Studying. Texas A&M Liberal Arts: Does Listening to Music Really Help You Study? ResearchGate: Individual Differences in Working Memory Predict the Effect of Music on Student Performance."
+    };
 
-    function readSection(sectionId) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        var section = document.getElementById(sectionId);
-        if(section){
-          var text = section.innerText || section.textContent;
-          currentUtterance = new window.SpeechSynthesisUtterance(text);
-          currentUtterance.rate = 1.05;
-          currentUtterance.pitch = 1;
-          currentUtterance.lang = 'en-US';
-          window.speechSynthesis.speak(currentUtterance);
-        }
-      } else {
-        alert('Sorry, your browser does not support speech synthesis.');
+    // For highlighting
+    let currentUtterance = null;
+    let currentSection = null;
+    let wordSpans = [];
+    let currentWordIdx = -1;
+
+    function renderTranscript(sectionId) {
+      const transcriptBox = document.querySelector(`#${sectionId} .transcript`);
+      const text = transcripts[sectionId];
+      // Split transcript into words, keep punctuation
+      let wordRegex = /[\w’'-]+|[.,?!:;"“”()—–]/g;
+      let words = text.match(wordRegex) || [];
+      transcriptBox.innerHTML = words.map((w, i) =>
+        `<span class="transcript-word" id="${sectionId}-word-${i}">${w}</span>`
+      ).join(' ') || text;
+      wordSpans = Array.from(transcriptBox.querySelectorAll('.transcript-word'));
+    }
+
+    function highlightWord(sectionId, idx) {
+      // Remove previous highlight
+      wordSpans.forEach(span => span.classList.remove('highlight-word'));
+      if (idx >= 0 && idx < wordSpans.length) {
+        wordSpans[idx].classList.add('highlight-word');
+        // Scroll into view if needed
+        wordSpans[idx].scrollIntoView({block: "nearest", inline: "nearest"});
       }
     }
+
+    function clearHighlight() {
+      wordSpans.forEach(span => span.classList.remove('highlight-word'));
+    }
+
+    function readSection(sectionId) {
+      if (!('speechSynthesis' in window)) {
+        alert('Sorry, your browser does not support speech synthesis.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      currentSection = sectionId;
+      renderTranscript(sectionId);
+      const transcriptBox = document.querySelector(`#${sectionId} .transcript`);
+      const text = transcripts[sectionId];
+      let wordRegex = /[\w’'-]+|[.,?!:;"“”()—–]/g;
+      let words = text.match(wordRegex) || [];
+      wordSpans = Array.from(transcriptBox.querySelectorAll('.transcript-word'));
+      currentWordIdx = -1;
+      clearHighlight();
+
+      currentUtterance = new window.SpeechSynthesisUtterance(text);
+      currentUtterance.rate = 1.05;
+      currentUtterance.pitch = 1;
+      currentUtterance.lang = 'en-US';
+
+      // Highlight words as they are spoken
+      currentUtterance.onboundary = function(event) {
+        if (event.name === "word") {
+          // Estimate word index by character offset
+          let charIndex = event.charIndex;
+          let runningLen = 0;
+          for (let i = 0; i < words.length; i++) {
+            runningLen += words[i].length + 1; // +1 for space
+            if (charIndex < runningLen) {
+              currentWordIdx = i;
+              highlightWord(sectionId, i);
+              break;
+            }
+          }
+        }
+      };
+      currentUtterance.onend = function() {
+        clearHighlight();
+      };
+      window.speechSynthesis.speak(currentUtterance);
+    }
+
     function pauseSpeech() {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.pause();
@@ -242,6 +310,7 @@
         window.speechSynthesis.resume();
       }
     }
+
     // Keyboard arrow navigation for readaloud buttons
     document.addEventListener('DOMContentLoaded', function() {
       var groups = document.querySelectorAll('.readaloud-group');
@@ -259,7 +328,10 @@
           });
         });
       });
+      // Render all transcripts on load
+      Object.keys(transcripts).forEach(renderTranscript);
     });
+
     // Optional: Stop speech when navigating away
     window.onbeforeunload = function() {
       if ('speechSynthesis' in window) {
@@ -294,9 +366,7 @@
         </div>
       </div>
       <h1 id="myth">Study Smarter, Not Louder: Debunking the Music & Academic Performance Myth</h1>
-      <div class="transcript" aria-label="Transcript for title">
-        <strong>Transcript:</strong> Study Smarter, Not Louder: Debunking the Music & Academic Performance Myth
-      </div>
+      <div class="transcript" aria-label="Transcript for title"></div>
     </section>
 
     <section id="myth-section">
@@ -311,9 +381,7 @@
       <p>
         Ever heard that listening to classical music—especially Mozart—will boost your IQ or make you ace your next exam? This idea, known as the “Mozart Effect,” has been music to students’ ears for decades. But is it true?
       </p>
-      <div class="transcript" aria-label="Transcript for The Myth">
-        <strong>Transcript:</strong> Ever heard that listening to classical music—especially Mozart—will boost your IQ or make you ace your next exam? This idea, known as the “Mozart Effect,” has been music to students’ ears for decades. But is it true?
-      </div>
+      <div class="transcript" aria-label="Transcript for The Myth"></div>
     </section>
 
     <section id="love-section">
@@ -336,9 +404,7 @@
       <p>
         But does your playlist really help you learn, or is it just background noise?
       </p>
-      <div class="transcript" aria-label="Transcript for Why Students Love Music">
-        <strong>Transcript:</strong> Music is everywhere on campus: in libraries, coffee shops, and even during late-night cram sessions. Students often turn to tunes to make long study sessions less boring, reduce stress and anxiety, and boost motivation and focus. But does your playlist really help you learn, or is it just background noise?
-      </div>
+      <div class="transcript" aria-label="Transcript for Why Students Love Music"></div>
     </section>
 
     <section id="science-section">
@@ -377,9 +443,7 @@
       <p>
         If you study with music but take exams in silence, you might have trouble recalling what you learned.
       </p>
-      <div class="transcript" aria-label="Transcript for Science">
-        <strong>Transcript:</strong> According to the National University, music can reduce stress and ease test anxiety, which might help you perform better in high-pressure situations. Dr. Masha Godkin notes that music activates both sides of your brain, potentially maximizing learning and memory. BUT: Music doesn’t magically make you smarter. The benefits are more about mood and motivation than actual brainpower. Everyone responds differently to music. Some students find certain genres—like classical or video game soundtracks—helpful, while others get distracted, especially by songs with lyrics or unfamiliar rhythms. Binaural beats (special audio tones) at 15Hz have been shown to enhance working memory and focus. Psychologists from Texas A&M University warn that multitasking is a myth. When you study and listen to music, especially music with lyrics, your brain can’t fully focus on both. This can hurt your ability to remember information. “When you’re doing two things at the same time, like studying and listening to music, and one of the things requires cognitive effort, there will be a cost to how much information you can retain.” — Dr. Brian Anderson, Cognitive Psychologist. If you study with music but take exams in silence, you might have trouble recalling what you learned.
-      </div>
+      <div class="transcript" aria-label="Transcript for Science"></div>
     </section>
 
     <section id="advice-section">
@@ -397,9 +461,7 @@
         <li>Match Exam Conditions: If your test will be in silence, practice studying in silence too.</li>
         <li>Listen to Your Brain: If you find yourself singing along instead of solving equations, it’s time to hit pause!</li>
       </ul>
-      <div class="transcript" aria-label="Transcript for Advice">
-        <strong>Transcript:</strong> Experiment: Try studying with different types of music (or none at all) and see what works best for you. Avoid Lyrics: Instrumental music or ambient sounds are less likely to distract you. Match Exam Conditions: If your test will be in silence, practice studying in silence too. Listen to Your Brain: If you find yourself singing along instead of solving equations, it’s time to hit pause!
-      </div>
+      <div class="transcript" aria-label="Transcript for Advice"></div>
     </section>
 
     <section id="bottomline-section">
@@ -414,9 +476,7 @@
       <p>
         Music can make studying more enjoyable and less stressful, but it won’t magically boost your grades. The best study soundtrack is the one that helps you focus—whether that’s Mozart, lo-fi beats, or good old-fashioned silence.
       </p>
-      <div class="transcript" aria-label="Transcript for The Bottom Line">
-        <strong>Transcript:</strong> Music can make studying more enjoyable and less stressful, but it won’t magically boost your grades. The best study soundtrack is the one that helps you focus—whether that’s Mozart, lo-fi beats, or good old-fashioned silence.
-      </div>
+      <div class="transcript" aria-label="Transcript for The Bottom Line"></div>
     </section>
 
     <section class="quiz-section" id="quiz" aria-labelledby="quiz-heading">
@@ -431,9 +491,7 @@
       <p><strong>Quick Quiz:</strong> Does listening to music always improve your grades?</p>
       <button class="button" type="button" aria-label="Quiz answer: Yes" onclick="alert('Nope! It depends on the person and the task.')">Yes</button>
       <button class="button" type="button" aria-label="Quiz answer: No" onclick="alert('Correct! Music affects everyone differently.')">No</button>
-      <div class="transcript" aria-label="Transcript for Quiz">
-        <strong>Transcript:</strong> Quick Quiz: Does listening to music always improve your grades? (Possible answers: Yes or No)
-      </div>
+      <div class="transcript" aria-label="Transcript for Quiz"></div>
     </section>
 
     <section id="sources-section">
@@ -452,9 +510,7 @@
         <li><a href="https://liberalarts.tamu.edu/blog/2021/03/10/does-listening-to-music-really-help-you-study/" target="_blank" rel="noopener noreferrer">Texas A&M Liberal Arts: Does Listening to Music Really Help You Study?</a></li>
         <li><a href="https://www.researchgate.net/publication/314290242_Individual_Differences_in_Working_Memory_Predict_the_Effect_of_Music_on_Student_Performance" target="_blank" rel="noopener noreferrer">ResearchGate: Individual Differences in Working Memory Predict the Effect of Music on Student Performance</a></li>
       </ul>
-      <div class="transcript" aria-label="Transcript for Sources">
-        <strong>Transcript:</strong> Sources: National University: Can Music Help You Study and Focus? UMGC: How Music Can Help You Study. JMScheibe: The Scientific Benefits of Listening to Music While Studying. Texas A&M Liberal Arts: Does Listening to Music Really Help You Study? ResearchGate: Individual Differences in Working Memory Predict the Effect of Music on Student Performance.
-      </div>
+      <div class="transcript" aria-label="Transcript for Sources"></div>
     </section>
   </main>
   <footer>
