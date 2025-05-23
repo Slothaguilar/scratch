@@ -1,238 +1,464 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Study Smarter, Not Louder: Debunking the Music & Academic Performance Myth</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Fonts for a modern look -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            background: linear-gradient(120deg, #e0e7ff 0%, #f4f4f9 100%);
-            font-family: 'Open Sans', Arial, sans-serif;
-            color: #2d2d2d;
+  <meta charset="UTF-8">
+  <title>Study Smarter, Not Louder: Debunking the Music & Academic Performance Myth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    html {
+      font-size: 18px;
+    }
+    body {
+      margin: 0;
+      background: linear-gradient(120deg, #e0e7ff 0%, #f4f4f9 100%);
+      font-family: 'Open Sans', Arial, sans-serif;
+      color: #222;
+      font-size: 1em;
+    }
+    a:focus, button:focus {
+      outline: 3px solid #ffd700;
+      outline-offset: 2px;
+    }
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      background: #ffd700;
+      color: #222;
+      z-index: 100;
+    }
+    .skip-link:focus {
+      left: 10px;
+      top: 10px;
+      width: auto;
+      height: auto;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+    nav[role="navigation"] {
+      background: #6a5acd;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .nav-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+    .nav-title {
+      color: #fff;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1.5em;
+      font-weight: bold;
+      letter-spacing: 2px;
+      padding: 18px 0;
+    }
+    .nav-links a {
+      color: #fff;
+      text-decoration: underline;
+      margin-left: 28px;
+      font-size: 1em;
+      font-weight: 600;
+      transition: color 0.2s;
+      padding: 8px 0;
+      display: inline-block;
+    }
+    .nav-links a:focus, .nav-links a:hover {
+      color: #ffd700;
+      text-decoration: underline;
+      background: #483d8b;
+    }
+    main[role="main"] {
+      max-width: 900px;
+      margin: 40px auto 0 auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(106,90,205,0.08);
+      padding: 2.5rem 2rem 2rem 2rem;
+    }
+    h1 {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 2.3em;
+      color: #483d8b;
+      margin-top: 0;
+      margin-bottom: 18px;
+    }
+    h2 {
+      color: #6a5acd;
+      margin-top: 36px;
+      margin-bottom: 10px;
+      font-size: 1.5em;
+    }
+    h3 {
+      color: #483d8b;
+      margin-top: 28px;
+      margin-bottom: 8px;
+      font-size: 1.18em;
+    }
+    ul {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+    li {
+      font-size: 1em;
+      line-height: 1.7;
+      margin-bottom: 6px;
+    }
+    p {
+      font-size: 1.07em;
+      line-height: 1.7;
+    }
+    blockquote {
+      background-color: #f0f6ff;
+      border-left: 5px solid #6a5acd;
+      margin: 20px 0;
+      padding: 12px 22px;
+      font-style: italic;
+      color: #333366;
+    }
+    .button, .readaloud {
+      background: #6a5acd;
+      color: white;
+      padding: 0.7em 1.6em;
+      border-radius: 24px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1em;
+      margin: 12px 12px 12px 0;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 2px 8px rgba(106,90,205,0.08);
+      min-width: 90px;
+      display: inline-block;
+    }
+    .button:focus, .button:hover, .readaloud:focus, .readaloud:hover {
+      background: #483d8b;
+      transform: translateY(-2px) scale(1.04);
+    }
+    .quiz-section {
+      background: #f9f7ff;
+      border-radius: 12px;
+      padding: 22px 18px;
+      margin: 36px 0 0 0;
+      box-shadow: 0 2px 8px rgba(106,90,205,0.04);
+    }
+    .sources-list {
+      font-size: 1em;
+      margin-top: 20px;
+    }
+    .sources-list a {
+      color: #6a5acd;
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+    .sources-list a:focus, .sources-list a:hover {
+      color: #483d8b;
+      text-decoration: underline;
+    }
+    .audio-section {
+      margin: 10px 0 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .readaloud-group {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .transcript {
+      background: #e0e7ff;
+      color: #222;
+      padding: 0.8em 1em;
+      border-radius: 8px;
+      margin-bottom: 1.2em;
+      font-size: 1em;
+      line-height: 1.7;
+      border-left: 4px solid #6a5acd;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .sr-only {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    @media (max-width: 700px) {
+      main[role="main"] {
+        padding: 20px 6vw 24px 6vw;
+      }
+      .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .nav-links {
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      .audio-section {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+  <script>
+    // Global utterance to allow pause/resume
+    let currentUtterance = null;
+
+    function readSection(sectionId) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        var section = document.getElementById(sectionId);
+        if(section){
+          var text = section.innerText || section.textContent;
+          currentUtterance = new window.SpeechSynthesisUtterance(text);
+          currentUtterance.rate = 1.05;
+          currentUtterance.pitch = 1;
+          currentUtterance.lang = 'en-US';
+          window.speechSynthesis.speak(currentUtterance);
         }
-        nav {
-            background: #6a5acd;
-            padding: 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        }
-        .nav-container {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
-        .nav-title {
-            color: #fff;
-            font-family: 'Montserrat', Arial, sans-serif;
-            font-size: 1.5em;
-            font-weight: bold;
-            letter-spacing: 2px;
-            padding: 18px 0;
-        }
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            margin-left: 28px;
-            font-size: 1em;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-        .nav-links a:hover {
-            color: #ffd700;
-        }
-        .main-content {
-            max-width: 900px;
-            margin: 40px auto 0 auto;
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(106,90,205,0.08);
-            padding: 40px 32px 32px 32px;
-        }
-        h1 {
-            font-family: 'Montserrat', Arial, sans-serif;
-            font-size: 2.3em;
-            color: #483d8b;
-            margin-top: 0;
-            margin-bottom: 18px;
-        }
-        h2 {
-            color: #6a5acd;
-            margin-top: 36px;
-            margin-bottom: 10px;
-            font-size: 1.5em;
-        }
-        h3 {
-            color: #483d8b;
-            margin-top: 28px;
-            margin-bottom: 8px;
-        }
-        ul {
-            margin-top: 0;
-            margin-bottom: 16px;
-        }
-        li {
-            font-size: 1.08em;
-            line-height: 1.7;
-            margin-bottom: 6px;
-        }
-        p {
-            font-size: 1.13em;
-            line-height: 1.7;
-        }
-        blockquote {
-            background-color: #f0f6ff;
-            border-left: 5px solid #6a5acd;
-            margin: 20px 0;
-            padding: 12px 22px;
-            font-style: italic;
-            color: #333366;
-        }
-        .button {
-            background: #6a5acd;
-            color: white;
-            padding: 11px 28px;
-            border-radius: 24px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.07em;
-            margin: 12px 12px 12px 0;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
-            box-shadow: 0 2px 8px rgba(106,90,205,0.08);
-        }
-        .button:hover {
-            background: #483d8b;
-            transform: translateY(-2px) scale(1.04);
-        }
-        .quiz-section {
-            background: #f9f7ff;
-            border-radius: 12px;
-            padding: 22px 18px;
-            margin: 36px 0 0 0;
-            box-shadow: 0 2px 8px rgba(106,90,205,0.04);
-        }
-        .sources-list {
-            font-size: 1em;
-            margin-top: 20px;
-        }
-        .sources-list a {
-            color: #6a5acd;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .sources-list a:hover {
-            color: #483d8b;
-            text-decoration: underline;
-        }
-        footer {
-            margin-top: 50px;
-            padding: 22px 0 16px 0;
-            border-top: 1px solid #ccc;
-            text-align: center;
-            color: #666;
-            font-size: 1em;
-            background: transparent;
-        }
-        @media (max-width: 700px) {
-            .main-content {
-                padding: 20px 6vw 24px 6vw;
+      } else {
+        alert('Sorry, your browser does not support speech synthesis.');
+      }
+    }
+    function pauseSpeech() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.pause();
+      }
+    }
+    function resumeSpeech() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.resume();
+      }
+    }
+    // Keyboard arrow navigation for readaloud buttons
+    document.addEventListener('DOMContentLoaded', function() {
+      var groups = document.querySelectorAll('.readaloud-group');
+      groups.forEach(function(group) {
+        var buttons = group.querySelectorAll('button');
+        buttons.forEach(function(btn, idx) {
+          btn.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') {
+              e.preventDefault();
+              buttons[(idx + 1) % buttons.length].focus();
+            } else if (e.key === 'ArrowLeft') {
+              e.preventDefault();
+              buttons[(idx - 1 + buttons.length) % buttons.length].focus();
             }
-            .nav-container {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .nav-links {
-                margin-top: 8px;
-                margin-bottom: 8px;
-            }
-        }
-    </style>
+          });
+        });
+      });
+    });
+    // Optional: Stop speech when navigating away
+    window.onbeforeunload = function() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+  </script>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <div class="nav-title">Study Smarter</div>
-            <div class="nav-links">
-                <a href="#myth">The Myth</a>
-                <a href="#science">Science</a>
-                <a href="#advice">Advice</a>
-                <a href="#quiz">Quiz</a>
-                <a href="#sources">Sources</a>
-            </div>
-        </div>
-    </nav>
-
-    <div class="main-content">
-        <h1 id="myth">Study Smarter, Not Louder: Debunking the Music & Academic Performance Myth</h1>
-
-        <h2>The Myth: “Mozart Will Make You Smarter!”</h2>
-        <p>Ever heard that listening to classical music—especially Mozart—will boost your IQ or make you ace your next exam? This idea, known as the “Mozart Effect,” has been music to students’ ears for decades. But is it true?</p>
-
-        <h2>Why Do Students Love Music While Studying?</h2>
-        <p>Music is everywhere on campus: in libraries, coffee shops, and even during late-night cram sessions. Students often turn to tunes to:</p>
-        <ul>
-            <li>Make long study sessions less boring</li>
-            <li>Reduce stress and anxiety</li>
-            <li>Boost motivation and focus</li>
-        </ul>
-        <p>But does your playlist really help you learn, or is it just background noise?</p>
-
-        <h2 id="science">What the Science Really Says</h2>
-
-        <h3>1. Music Can Help—But Not the Way You Think</h3>
-        <p>According to the National University, music can reduce stress and ease test anxiety, which might help you perform better in high-pressure situations. Dr. Masha Godkin notes that music activates both sides of your brain, potentially maximizing learning and memory (<a href="https://www.nu.edu/blog/can-music-help-you-study-and-focus/" target="_blank" rel="noopener noreferrer">National University</a>).</p>
-        <p><strong>BUT:</strong> Music doesn’t magically make you smarter. The benefits are more about mood and motivation than actual brainpower.</p>
-
-        <h3>2. It’s Personal: One Size Doesn’t Fit All</h3>
-        <p>Everyone responds differently to music. Some students find certain genres—like classical or video game soundtracks—helpful, while others get distracted, especially by songs with lyrics or unfamiliar rhythms (<a href="https://www.umgc.edu/blog/how-music-can-help-you-study" target="_blank" rel="noopener noreferrer">UMGC</a>).</p>
-        <ul>
-            <li>Binaural beats (special audio tones) at 15Hz have been shown to enhance working memory and focus (<a href="https://jmscheibe.com/the-scientific-benefits-of-listening-to-music-while-studying/" target="_blank" rel="noopener noreferrer">JMScheibe</a>).</li>
-        </ul>
-
-        <h3>3. Distraction Is Real</h3>
-        <p>Psychologists from Texas A&M University warn that multitasking is a myth. When you study and listen to music, especially music with lyrics, your brain can’t fully focus on both. This can hurt your ability to remember information (<a href="https://liberalarts.tamu.edu/blog/2021/03/10/does-listening-to-music-really-help-you-study/" target="_blank" rel="noopener noreferrer">TAMU Liberal Arts</a>).</p>
-        <blockquote>
-            “When you’re doing two things at the same time, like studying and listening to music, and one of the things requires cognitive effort, there will be a cost to how much information you can retain.”  
-            — Dr. Brian Anderson, Cognitive Psychologist
-        </blockquote>
-        <p>If you study with music but take exams in silence, you might have trouble recalling what you learned.</p>
-
-        <h2 id="advice">What Should You Do?</h2>
-        <ul>
-            <li>Experiment: Try studying with different types of music (or none at all) and see what works best for you.</li>
-            <li>Avoid Lyrics: Instrumental music or ambient sounds are less likely to distract you.</li>
-            <li>Match Exam Conditions: If your test will be in silence, practice studying in silence too.</li>
-            <li>Listen to Your Brain: If you find yourself singing along instead of solving equations, it’s time to hit pause!</li>
-        </ul>
-
-        <h2>The Bottom Line</h2>
-        <p>Music can make studying more enjoyable and less stressful, but it won’t magically boost your grades. The best study soundtrack is the one that helps you focus—whether that’s Mozart, lo-fi beats, or good old-fashioned silence.</p>
-
-        <div class="quiz-section" id="quiz">
-            <h2>Quiz</h2>
-            <p><strong>Quick Quiz:</strong> Does listening to music always improve your grades?</p>
-            <button class="button" onclick="alert('Nope! It depends on the person and the task.')">Yes</button>
-            <button class="button" onclick="alert('Correct! Music affects everyone differently.')">No</button>
-        </div>
-
-        <h2 id="sources">Sources</h2>
-        <ul class="sources-list">
-            <li><a href="https://www.nu.edu/blog/can-music-help-you-study-and-focus/" target="_blank" rel="noopener noreferrer">National University: Can Music Help You Study and Focus?</a></li>
-            <li><a href="https://www.umgc.edu/blog/how-music-can-help-you-study" target="_blank" rel="noopener noreferrer">UMGC: How Music Can Help You Study</a></li>
-            <li><a href="https://jmscheibe.com/the-scientific-benefits-of-listening-to-music-while-studying/" target="_blank" rel="noopener noreferrer">JMScheibe: The Scientific Benefits of Listening to Music While Studying</a></li>
-            <li><a href="https://liberalarts.tamu.edu/blog/2021/03/10/does-listening-to-music-really-help-you-study/" target="_blank" rel="noopener noreferrer">Texas A&M Liberal Arts: Does Listening to Music Really Help You Study?</a></li>
-            <li><a href="https://www.researchgate.net/publication/314290242_Individual_Differences_in_Working_Memory_Predict_the_Effect_of_Music_on_Student_Performance" target="_blank" rel="noopener noreferrer">ResearchGate: Individual Differences in Working Memory Predict the Effect of Music on Student Performance</a></li>
-        </ul>
+  <a href="#maincontent" class="skip-link">Skip to main content</a>
+  <nav role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="nav-title">Study Smarter</div>
+      <div class="nav-links">
+        <a href="#title-section">Title</a>
+        <a href="#myth">The Myth</a>
+        <a href="#science">Science</a>
+        <a href="#advice">Advice</a>
+        <a href="#quiz">Quiz</a>
+        <a href="#sources">Sources</a>
+      </div>
     </div>
+  </nav>
+  <main id="maincontent" role="main" tabindex="-1">
 
-    <footer>
-        Happy Studying! Remember, the real magic is in your study habits—not your playlist.
-    </footer>
+    <section id="title-section">
+      <div class="audio-section">
+        <div class="readaloud-group" role="group" aria-label="Read aloud controls for Title">
+          <button class="readaloud" tabindex="0" onclick="readSection('title-section')" aria-label="Read aloud: Title">Read Aloud</button>
+          <button class="readaloud" tabindex="0" onclick="pauseSpeech()" aria-label="Pause reading">Pause</button>
+          <button class="readaloud" tabindex="0" onclick="resumeSpeech()" aria-label="Resume reading">Resume</button>
+        </div>
+      </div>
+      <h1 id="myth">Study Smarter, Not Louder: Debunking the Music & Academic Performance Myth</h1>
+      <div class="transcript" aria-label="Transcript for title">
+        <strong>Transcript:</strong> Study Smarter, Not Louder: Debunking the Music & Academic Performance Myth
+      </div>
+    </section>
+
+    <section id="myth-section">
+      <div class="audio-section">
+        <div class="readaloud-group" role="group" aria-label="Read aloud controls for The Myth">
+          <button class="readaloud" tabindex="0" onclick="readSection('myth-section')" aria-label="Read aloud: The Myth section">Read Aloud</button>
+          <button class="readaloud" tabindex="0" onclick="pauseSpeech()" aria-label="Pause reading">Pause</button>
+          <button class="readaloud" tabindex="0" onclick="resumeSpeech()" aria-label="Resume reading">Resume</button>
+        </div>
+      </div>
+      <h2>The Myth: “Mozart Will Make You Smarter!”</h2>
+      <p>
+        Ever heard that listening to classical music—especially Mozart—will boost your IQ or make you ace your next exam? This idea, known as the “Mozart Effect,” has been music to students’ ears for decades. But is it true?
+      </p>
+      <div class="transcript" aria-label="Transcript for The Myth">
+        <strong>Transcript:</strong> Ever heard that listening to classical music—especially Mozart—will boost your IQ or make you ace your next exam? This idea, known as the “Mozart Effect,” has been music to students’ ears for decades. But is it true?
+      </div>
+    </section>
+
+    <section id="love-section">
+      <div class="audio-section">
+        <div class="readaloud-group" role="group" aria-label="Read aloud controls for Why Students Love Music">
+          <button class="readaloud" tabindex="0" onclick="readSection('love-section')" aria-label="Read aloud: Why Do Students Love Music While Studying">Read Aloud</button>
+          <button class="readaloud" tabindex="0" onclick="pauseSpeech()" aria-label="Pause reading">Pause</button>
+          <button class="readaloud" tabindex="0" onclick="resumeSpeech()" aria-label="Resume reading">Resume</button>
+        </div>
+      </div>
+      <h2>Why Do Students Love Music While Studying?</h2>
+      <p>
+        Music is everywhere on campus: in libraries, coffee shops, and even during late-night cram sessions. Students often turn to tunes to:
+      </p>
+      <ul>
+        <li>Make long study sessions less boring</li>
+        <li>Reduce stress and anxiety</li>
+        <li>Boost motivation and focus</li>
+      </ul>
+      <p>
+        But does your playlist really help you learn, or is it just background noise?
+      </p>
+      <div class="transcript" aria-label="Transcript for Why Students Love Music">
+        <strong>Transcript:</strong> Music is everywhere on campus: in libraries, coffee shops, and even during late-night cram sessions. Students often turn to tunes to make long study sessions less boring, reduce stress and anxiety, and boost motivation and focus. But does your playlist really help you learn, or is it just background noise?
+      </div>
+    </section>
+
+    <section id="science-section">
+      <div class="audio-section">
+        <div class="readaloud-group" role="group" aria-label="Read aloud controls for Science">
+          <button class="readaloud" tabindex="0" onclick="readSection('science-section')" aria-label="Read aloud: What the Science Really Says">Read Aloud</button>
+          <button class="readaloud" tabindex="0" onclick="pauseSpeech()" aria-label="Pause reading">Pause</button>
+          <button class="readaloud" tabindex="0" onclick="resumeSpeech()" aria-label="Resume reading">Resume</button>
+        </div>
+      </div>
+      <h2 id="science">What the Science Really Says</h2>
+      <h3>1. Music Can Help—But Not the Way You Think</h3>
+      <p>
+        According to the National University, music can reduce stress and ease test anxiety, which might help you perform better in high-pressure situations. Dr. Masha Godkin notes that music activates both sides of your brain, potentially maximizing learning and memory (<a href="https://www.nu.edu/blog/can-music-help-you-study-and-focus/" target="_blank" rel="noopener noreferrer">National University: Can Music Help You Study and Focus?</a>).
+      </p>
+      <p>
+        <strong>BUT:</strong> Music doesn’t magically make you smarter. The benefits are more about mood and motivation than actual brainpower.
+      </p>
+
+      <h3>2. It’s Personal: One Size Doesn’t Fit All</h3>
+      <p>
+        Everyone responds differently to music. Some students find certain genres—like classical or video game soundtracks—helpful, while others get distracted, especially by songs with lyrics or unfamiliar rhythms (<a href="https://www.umgc.edu/blog/how-music-can-help-you-study" target="_blank" rel="noopener noreferrer">UMGC: How Music Can Help You Study</a>).
+      </p>
+      <ul>
+        <li>Binaural beats (special audio tones) at 15Hz have been shown to enhance working memory and focus (<a href="https://jmscheibe.com/the-scientific-benefits-of-listening-to-music-while-studying/" target="_blank" rel="noopener noreferrer">JMScheibe: The Scientific Benefits of Listening to Music While Studying</a>).</li>
+      </ul>
+
+      <h3>3. Distraction Is Real</h3>
+      <p>
+        Psychologists from Texas A&amp;M University warn that multitasking is a myth. When you study and listen to music, especially music with lyrics, your brain can’t fully focus on both. This can hurt your ability to remember information (<a href="https://liberalarts.tamu.edu/blog/2021/03/10/does-listening-to-music-really-help-you-study/" target="_blank" rel="noopener noreferrer">Texas A&amp;M Liberal Arts: Does Listening to Music Really Help You Study?</a>).
+      </p>
+      <blockquote>
+        “When you’re doing two things at the same time, like studying and listening to music, and one of the things requires cognitive effort, there will be a cost to how much information you can retain.”  
+        — Dr. Brian Anderson, Cognitive Psychologist
+      </blockquote>
+      <p>
+        If you study with music but take exams in silence, you might have trouble recalling what you learned.
+      </p>
+      <div class="transcript" aria-label="Transcript for Science">
+        <strong>Transcript:</strong> According to the National University, music can reduce stress and ease test anxiety, which might help you perform better in high-pressure situations. Dr. Masha Godkin notes that music activates both sides of your brain, potentially maximizing learning and memory. BUT: Music doesn’t magically make you smarter. The benefits are more about mood and motivation than actual brainpower. Everyone responds differently to music. Some students find certain genres—like classical or video game soundtracks—helpful, while others get distracted, especially by songs with lyrics or unfamiliar rhythms. Binaural beats (special audio tones) at 15Hz have been shown to enhance working memory and focus. Psychologists from Texas A&M University warn that multitasking is a myth. When you study and listen to music, especially music with lyrics, your brain can’t fully focus on both. This can hurt your ability to remember information. “When you’re doing two things at the same time, like studying and listening to music, and one of the things requires cognitive effort, there will be a cost to how much information you can retain.” — Dr. Brian Anderson, Cognitive Psychologist. If you study with music but take exams in silence, you might have trouble recalling what you learned.
+      </div>
+    </section>
+
+    <section id="advice-section">
+      <div class="audio-section">
+        <div class="readaloud-group" role="group" aria-label="Read aloud controls for Advice">
+          <button class="readaloud" tabindex="0" onclick="readSection('advice-section')" aria-label="Read aloud: What Should You Do">Read Aloud</button>
+          <button class="readaloud" tabindex="0" onclick="pauseSpeech()" aria-label="Pause reading">Pause</button>
+          <button class="readaloud" tabindex="0" onclick="resumeSpeech()" aria-label="Resume reading">Resume</button>
+        </div>
+      </div>
+      <h2 id="advice">What Should You Do?</h2>
+      <ul>
+        <li>Experiment: Try studying with different types of music (or none at all) and see what works best for you.</li>
+        <li>Avoid Lyrics: Instrumental music or ambient sounds are less likely to distract you.</li>
+        <li>Match Exam Conditions: If your test will be in silence, practice studying in silence too.</li>
+        <li>Listen to Your Brain: If you find yourself singing along instead of solving equations, it’s time to hit pause!</li>
+      </ul>
+      <div class="transcript" aria-label="Transcript for Advice">
+        <strong>Transcript:</strong> Experiment: Try studying with different types of music (or none at all) and see what works best for you. Avoid Lyrics: Instrumental music or ambient sounds are less likely to distract you. Match Exam Conditions: If your test will be in silence, practice studying in silence too. Listen to Your Brain: If you find yourself singing along instead of solving equations, it’s time to hit pause!
+      </div>
+    </section>
+
+    <section id="bottomline-section">
+      <div class="audio-section">
+        <div class="readaloud-group" role="group" aria-label="Read aloud controls for The Bottom Line">
+          <button class="readaloud" tabindex="0" onclick="readSection('bottomline-section')" aria-label="Read aloud: The Bottom Line">Read Aloud</button>
+          <button class="readaloud" tabindex="0" onclick="pauseSpeech()" aria-label="Pause reading">Pause</button>
+          <button class="readaloud" tabindex="0" onclick="resumeSpeech()" aria-label="Resume reading">Resume</button>
+        </div>
+      </div>
+      <h2>The Bottom Line</h2>
+      <p>
+        Music can make studying more enjoyable and less stressful, but it won’t magically boost your grades. The best study soundtrack is the one that helps you focus—whether that’s Mozart, lo-fi beats, or good old-fashioned silence.
+      </p>
+      <div class="transcript" aria-label="Transcript for The Bottom Line">
+        <strong>Transcript:</strong> Music can make studying more enjoyable and less stressful, but it won’t magically boost your grades. The best study soundtrack is the one that helps you focus—whether that’s Mozart, lo-fi beats, or good old-fashioned silence.
+      </div>
+    </section>
+
+    <section class="quiz-section" id="quiz" aria-labelledby="quiz-heading">
+      <div class="audio-section">
+        <div class="readaloud-group" role="group" aria-label="Read aloud controls for Quiz">
+          <button class="readaloud" tabindex="0" onclick="readSection('quiz')" aria-label="Read aloud: Quiz section">Read Aloud</button>
+          <button class="readaloud" tabindex="0" onclick="pauseSpeech()" aria-label="Pause reading">Pause</button>
+          <button class="readaloud" tabindex="0" onclick="resumeSpeech()" aria-label="Resume reading">Resume</button>
+        </div>
+      </div>
+      <h2 id="quiz-heading">Quiz</h2>
+      <p><strong>Quick Quiz:</strong> Does listening to music always improve your grades?</p>
+      <button class="button" type="button" aria-label="Quiz answer: Yes" onclick="alert('Nope! It depends on the person and the task.')">Yes</button>
+      <button class="button" type="button" aria-label="Quiz answer: No" onclick="alert('Correct! Music affects everyone differently.')">No</button>
+      <div class="transcript" aria-label="Transcript for Quiz">
+        <strong>Transcript:</strong> Quick Quiz: Does listening to music always improve your grades? (Possible answers: Yes or No)
+      </div>
+    </section>
+
+    <section id="sources-section">
+      <div class="audio-section">
+        <div class="readaloud-group" role="group" aria-label="Read aloud controls for Sources">
+          <button class="readaloud" tabindex="0" onclick="readSection('sources-section')" aria-label="Read aloud: Sources">Read Aloud</button>
+          <button class="readaloud" tabindex="0" onclick="pauseSpeech()" aria-label="Pause reading">Pause</button>
+          <button class="readaloud" tabindex="0" onclick="resumeSpeech()" aria-label="Resume reading">Resume</button>
+        </div>
+      </div>
+      <h2 id="sources">Sources</h2>
+      <ul class="sources-list">
+        <li><a href="https://www.nu.edu/blog/can-music-help-you-study-and-focus/" target="_blank" rel="noopener noreferrer">National University: Can Music Help You Study and Focus?</a></li>
+        <li><a href="https://www.umgc.edu/blog/how-music-can-help-you-study" target="_blank" rel="noopener noreferrer">UMGC: How Music Can Help You Study</a></li>
+        <li><a href="https://jmscheibe.com/the-scientific-benefits-of-listening-to-music-while-studying/" target="_blank" rel="noopener noreferrer">JMScheibe: The Scientific Benefits of Listening to Music While Studying</a></li>
+        <li><a href="https://liberalarts.tamu.edu/blog/2021/03/10/does-listening-to-music-really-help-you-study/" target="_blank" rel="noopener noreferrer">Texas A&M Liberal Arts: Does Listening to Music Really Help You Study?</a></li>
+        <li><a href="https://www.researchgate.net/publication/314290242_Individual_Differences_in_Working_Memory_Predict_the_Effect_of_Music_on_Student_Performance" target="_blank" rel="noopener noreferrer">ResearchGate: Individual Differences in Working Memory Predict the Effect of Music on Student Performance</a></li>
+      </ul>
+      <div class="transcript" aria-label="Transcript for Sources">
+        <strong>Transcript:</strong> Sources: National University: Can Music Help You Study and Focus? UMGC: How Music Can Help You Study. JMScheibe: The Scientific Benefits of Listening to Music While Studying. Texas A&M Liberal Arts: Does Listening to Music Really Help You Study? ResearchGate: Individual Differences in Working Memory Predict the Effect of Music on Student Performance.
+      </div>
+    </section>
+  </main>
+  <footer>
+    Happy Studying! Remember, the real magic is in your study habits—not your playlist.
+  </footer>
 </body>
 </html>
